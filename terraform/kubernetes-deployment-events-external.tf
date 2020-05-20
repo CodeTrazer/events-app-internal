@@ -8,7 +8,7 @@ resource "kubernetes_deployment" "events-external-deployment" {
   }
 
   spec {
-    replicas                  = 4
+    replicas                  = 2
     progress_deadline_seconds = 60
     selector {
       match_labels = {
@@ -25,6 +25,11 @@ resource "kubernetes_deployment" "events-external-deployment" {
         container {
           image = "gcr.io/dtc-user108/external-image:v1.0.0"
           name  = "events-external"
+        
+          env {
+            name  = "SERVER"
+            value = "http://events-internal-service:8082"
+          }
 
           port {
             container_port = 8080
